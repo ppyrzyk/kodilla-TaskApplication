@@ -1,6 +1,6 @@
 package com.crud.tasks.trello.client;
 
-import com.crud.tasks.config.TrelloUrl;
+import com.crud.tasks.config.TrelloConfig;
 import com.crud.tasks.domain.TrelloBoardDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +19,22 @@ import java.util.Optional;
 public class TrelloClient {
 
     @Autowired
-    private TrelloUrl trelloUrl;
+    private TrelloConfig trelloConfig;
     @Autowired
     private final RestTemplate restTemplate;
 
 
 
     public List<TrelloBoardDto> getTrelloBoards() {
-        URI url = UriComponentsBuilder.fromHttpUrl(trelloUrl.getTrelloApiEndpoint()+ "/members/" + trelloUrl.getTrelloUsername() + "/boards")
-                .queryParam("key", trelloUrl.getTrelloAppKey())
-                .queryParam("token", trelloUrl.getTrelloToken())
+        URI url = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint()+ "/members/" + trelloConfig.getTrelloUsername() + "/boards")
+                .queryParam("key", trelloConfig.getTrelloAppKey())
+                .queryParam("token", trelloConfig.getTrelloToken())
                 .queryParam("fields", "name,id")
+                .queryParam("lists", "all")
                 .build()
                 .encode()
                 .toUri();
+
 
         TrelloBoardDto[] boardsResponse = restTemplate.getForObject(url, TrelloBoardDto[].class);
 
