@@ -1,8 +1,9 @@
 package com.crud.tasks.trello.client;
 
+import com.crud.tasks.config.TrelloUrl;
 import com.crud.tasks.domain.TrelloBoardDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -17,23 +18,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TrelloClient {
 
+    @Autowired
+    private TrelloUrl trelloUrl;
+    @Autowired
     private final RestTemplate restTemplate;
 
-    @Value("${trello.api.endpoint.prod}")
-    private String trelloApiEndpoint;
-    @Value("${trello.app.key}")
-    private String trelloAppKey;
-    @Value("${trello.app.token}")
-    private String trelloToken;
-    @Value("ppyrzyk")
-    private String trelloAppUsername;
+
 
     public List<TrelloBoardDto> getTrelloBoards() {
-        URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/" + trelloAppUsername + "/boards")
-                .queryParam("key", trelloAppKey)
-                .queryParam("token", trelloToken)
+        URI url = UriComponentsBuilder.fromHttpUrl(trelloUrl.getTrelloApiEndpoint()+ "/members/" + trelloUrl.getTrelloUsername() + "/boards")
+                .queryParam("key", trelloUrl.getTrelloAppKey())
+                .queryParam("token", trelloUrl.getTrelloToken())
                 .queryParam("fields", "name,id")
-                .queryParam("username", trelloAppUsername)
                 .build()
                 .encode()
                 .toUri();
