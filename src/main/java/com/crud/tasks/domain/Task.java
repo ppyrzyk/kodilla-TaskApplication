@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Task {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.AUTO
     )
     private Long id;
 
